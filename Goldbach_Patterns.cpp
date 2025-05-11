@@ -25,6 +25,7 @@
 #include <conio.h>
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include <cmath>
 #include <string>
 #include <cstring>
@@ -46,6 +47,9 @@ using namespace std;
 ofstream fout;
 ifstream fin;
 vector<string> files;
+
+std::vector<double> v1;
+std::vector<double> v;
 
 bool is_prime(long n)
 {
@@ -122,6 +126,43 @@ void help1()
 	cout << "	        f, l, 5, x, t, a " << endl;
 }
 
+bool file_exists(const std::string& filename)
+{
+	std::ifstream file(filename);
+	return file.good();
+}
+
+bool create_file(int final)
+{ 
+	string code, r1 = "";
+	int k = (final - 6) / 2 + 1;
+
+	std::cout << "\nDo you really want to compute this vector [N]?" << endl;
+	std::cout << "This could take several hours or even days." << endl;
+	std::cin >> code;
+
+	if (toupper(code[0]) != 'Y')
+		return false;
+
+	clock_t start = clock(); // Start the clock
+
+	for (int i = 1; i <= k; i++)
+	{
+		if (is_prime(2 * i + 1))
+			v1.push_back(1);
+		else
+			v1.push_back(0);
+		if (i % 100000 == 0)
+			std::cout << "                   " << '\r' << 2 * i;
+	}
+
+	clock_t end = clock(); // Stop the clock
+
+	double elapsed_mins = double(end - start) / (60 * CLOCKS_PER_SEC);
+	if (elapsed_mins > 1)
+		std::cout << "\n Elapsed time constructing vector: " << elapsed_mins << " minutes" << std::endl;
+}
+
 int main()
 {
 	string data = GetCurrentDirectory().c_str();
@@ -195,6 +236,8 @@ int main()
 		std::cin >> cmd;
 		end = stoi(cmd);
 
+		k = (end - 6) / 2 + 1;
+
 		if (end > pow(10.0,9))
 		{
 			std::cout << "\nEnd > 10^9" << endl;
@@ -224,33 +267,43 @@ int main()
 			filename = data + "10-8.txt";
 		}
 
-		if (100000000 <= end)
+		if (100000000 <= end && end < 1000000000)
 		{
 			filename = data + "10-9.txt";
+			if (!file_exists(filename))
+				if (!create_file(end))
+					return 0;
 		}
 
-		cout << filename << endl;
-
-		infile.open(filename);
-		r1 = getFileContent(filename);
-		r1.erase(remove(r1.begin(), r1.end(), ' '), r1.end());
-		r1.erase(remove(r1.begin(), r1.end(), '\n'), r1.end());
-		std::cout << r1.size() << " bytes read from " << filename << endl;
-
-		k = (end - 6) / 2 + 1;
-		for (int i = 1; i <= 2 * k; i += 2)
-			v1.push_back(r1[i] - 48);
-
-		if (2 * k > r1.size())
+		if (1000000000 <= end)
 		{
-			std::cout << 2 * k << " > " << r1.size() << endl;
-			exit(1);
+			filename = data + "10-10.txt";
+			if (!create_file(end))
+				return 0;
 		}
 
-		for (int i = 1; i <= 2 * k; i += 2)
-			v1.push_back(r1[i] - 48);
+		if (file_exists(filename))
+		{ 
+			cout << filename << endl;
+			infile.open(filename);
+			r1 = getFileContent(filename);
+			r1.erase(remove(r1.begin(), r1.end(), ' '), r1.end());
+			r1.erase(remove(r1.begin(), r1.end(), '\n'), r1.end());
+			std::cout << r1.size() << " bytes read from " << filename << endl;
 
-		infile.close();
+			for (int i = 1; i <= 2 * k; i += 2)
+				v1.push_back(r1[i] - 48);
+		}
+		else
+		{
+			if (2 * k > r1.size())
+			{
+				std::cout << 2 * k << " > " << r1.size() << endl;
+				exit(1);
+			}
+
+			infile.close();
+		}
 
 		std::cout << "\nEnter an 'f' for output file or 'c' for console" << endl;
 		std::cin >> code;
