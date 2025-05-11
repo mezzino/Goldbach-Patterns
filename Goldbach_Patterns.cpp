@@ -132,10 +132,10 @@ bool file_exists(const std::string& filename)
 	return file.good();
 }
 
-bool create_file(int final)
+bool create_file(long final)
 { 
 	string code, r1 = "";
-	int k = (final - 6) / 2 + 1;
+	long k = (final - 6) / 2 + 1;
 
 	std::cout << "\nDo you really want to compute this vector [N]?" << endl;
 	std::cout << "This could take several hours or even days." << endl;
@@ -238,9 +238,9 @@ int main()
 
 		k = (end - 6) / 2 + 1;
 
-		if (end > pow(10.0,9))
+		if (end > pow(10.0,10))
 		{
-			std::cout << "\nEnd > 10^9" << endl;
+			std::cout << "\nEnd > 10^10" << endl;
 			std::cin.get();
 			return 0;
 		}
