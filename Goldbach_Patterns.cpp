@@ -6,17 +6,22 @@
 // Input Options and output formats
 //   Start = srarting value of e
 //   End   = ending value of e
+//
 //   Output f = output file on desktop
 //     or   c for console output
-//   Code:  'e' verify induction step
-//			'r' reverse induction step
-//			'x' exceptions only
-//			't' total number of solutions
-//			'z' all sequential solutions
+//
+//   Code:  
+//       'a' all solutions
+//       'f' first sequential solution
+//	     'g' all Goldbach partitions
+//	     'l' last sequential solution
+//	     's' allequential solutions
+//	     't' total number of solutions
+//	     'x' exceptions only
 // 
 // Output file option
-//			Formatted solutions depending on code
-//				e, r, x, t, z 
+//		Formatted solutions depending on code
+//		a, f, g, l, s, t, x 
 //
 #include <io.h>
 #include <conio.h>
@@ -120,7 +125,7 @@ void help1()
 	cout << "		'x' exceptions only" << endl;
 	cout << "   Output file option:" << endl;
 	cout << "		Formatted solutions depending on code" << endl;
-	cout << "	        f, g, l, s, t, x " << endl;
+	cout << "	        a, f, g, l, s, t, x " << endl;
 }
 
 int main()
@@ -342,8 +347,10 @@ int main()
 					{
 						i = k  - 1 - ii;
 					}
-					if (e > 10000 && e % 10000 == 0)
-						std::cout << " " << e/10000 << "\r";
+
+					if (total && ii > 10000 && ii % 10000 == 0)
+						std::cout << " " << e << ": " << ii/10000 <<  "\r";
+
 
 					if (debug)
 						cout << "i: " << i << " - " << k - i - 1 << endl;
