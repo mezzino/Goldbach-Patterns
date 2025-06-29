@@ -11,8 +11,8 @@
 //     or   c for console output
 //
 //   Code:  
-//       'a' all solutions
-//       'f' first sequential solution
+//           'a' all solutions
+//           'f' first sequential solution
 //	     'g' all Goldbach partitions
 //	     'l' last sequential solution
 //	     's' allequential solutions
@@ -350,7 +350,6 @@ int main()
 
 					if (total && ii > 10000 && ii % 10000 == 0)
 						std::cout << " " << e << ": " << ii/10000 <<  "\r";
-
 
 					if (debug)
 						cout << "i: " << i << " - " << k - i - 1 << endl;
