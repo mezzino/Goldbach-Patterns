@@ -11,8 +11,8 @@
 //     or   c for console output
 //
 //   Code:  
-//           'a' all solutions
-//           'f' first sequential solution
+//       'a' all solutions
+//       'f' first sequential solution
 //	     'g' all Goldbach partitions
 //	     'l' last sequential solution
 //	     's' allequential solutions
@@ -345,11 +345,14 @@ int main()
 					int i = ii;
 					if (last_step)
 					{
-						i = k  - 1 - ii;
+						i = k - 1 - ii;
 					}
 
+					if (exception)
+						std::cout << " " << e << "\r";
+
 					if (total && ii > 10000 && ii % 10000 == 0)
-						std::cout << " " << e << ": " << ii/10000 <<  "\r";
+						std::cout << " " << e << ": " << ii / 10000 << "\r";
 
 					if (debug)
 						cout << "i: " << i << " - " << k - i - 1 << endl;
@@ -358,7 +361,7 @@ int main()
 					{
 						p1 = 2 * i + 3;
 
-						if (goldbach && !total && p1 <= e/2)
+						if (goldbach && !total && p1 <= e / 2)
 						{
 							if (fileopen)
 								outfile << to_string(e) + " (mod 6) = " + to_string(e % 6) + " : " + to_string(p1) << " : " << to_string(e - p1) << endl;
@@ -366,83 +369,83 @@ int main()
 						}
 
 						totals = totals + 1;
-						
+
 						int jj = i - 1;
 						if (jj < 0)
 							jj = 0;
 
-						for (int j = jj  ; j <= i + 1; j += 1)
+						for (int j = jj; j <= i + 1; j += 1)
 						{
 
 							if (debug)
 								cout << "j: " << j << " - " << l - j - 1 << endl;
 
-								if (v1[j] * v1[l - j - 1])
+							if (v1[j] * v1[l - j - 1])
+							{
+								p2 = 2 * j + 3;
+
+								if (debug)
+									cout << i << " : " << p1 << " / " << j << " : " << p2 << endl;
+
+								if (p2 < e && is_prime(e - p1) && is_prime(e + 2 - p2))
 								{
-									p2 = 2 * j + 3;
-
-									if (debug)
-										cout << i << " : " << p1 << " / " << j << " : " << p2 << endl;
-
-									if (p2 < e && is_prime(e - p1) && is_prime(e + 2 - p2) )
+									count = count + 1;
+									twins = twins + 1;
+									if (count >= 1)
 									{
-										count = count + 1;
-										twins = twins + 1;
-										if (count >= 1)
+										flag = "";
+										int diff = (e + 2 - 2 * p2) - (e - 2 * p1);
+
+										if (debug)
+											cout << "diff: " << diff << endl;
+
+										if (e % 6 == 2 && diff != 6)
 										{
-											flag = "";
-											int diff = (e + 2 - 2 * p2) - (e - 2 * p1);
+											flag = "*";
+											twins--;
+										}
+										if ((e % 6 == 0 || e % 6 == 4) && diff != -2)
+										{
+											flag = "*";
+											twins--;
+										}
 
-											if (debug)
-												cout << "diff: " << diff << endl;
-
-											if (e % 6 == 2 && diff != 6)
+										if (!exception)
+										{
+											if ((sequential || first_step || last_step) && !total && flag != "*")
 											{
-												flag = "*";
-												twins--;
-											}
-											if ((e % 6 == 0 || e % 6 == 4) && diff != -2)
-											{
-												flag = "*";
-												twins--;
-											}
-
-											if (!exception)
-											{
-												if ((sequential || first_step || last_step) && !total && flag != "*")
+												if (fileopen)
 												{
-													if (fileopen)
-													{
-														outfile << to_string(e) + " (mod 6) = " + to_string(e % 6) + " : " + to_string(p1) + " / " + to_string(e - p1) << " : " << to_string(p2) << " (" << e - 2 * p1 << ") ";
-														outfile << flag << " ( " << e + 2 - 2 * p2 - (e - 2 * p1) << " ) " << to_string(p2) << " : " << to_string(e + 2 - p2) << endl;
-													}
-													cout << to_string(e) + " (mod 6) = " + to_string(e % 6) + " : " + to_string(p1) + " / " + to_string(e-p1) << " : " << to_string(p2) << " (" << e - 2 * p1 << ") ";
-													cout << flag << " ( " << e + 2 - 2 * p2 - (e - 2 * p1) << " ) " << to_string(p2) << " : " << to_string(e + 2 - p2) << endl;
+													outfile << to_string(e) + " (mod 6) = " + to_string(e % 6) + " : " + to_string(p1) + " / " + to_string(e - p1) << " : " << to_string(p2) << " (" << e - 2 * p1 << ") ";
+													outfile << flag << " ( " << e + 2 - 2 * p2 - (e - 2 * p1) << " ) " << to_string(p2) << " : " << to_string(e + 2 - p2) << endl;
 												}
-											}
-											else
-											{
-												if (!exception && flag == "*")
-												{
-													if (fileopen)
-													{
-														outfile << to_string(e) + ": " + to_string(p1) << " : " << to_string(e - p1) << " (" << e - 2 * p1 << ") ";
-														outfile << flag << " ( " << e + 2 - 2 * p2 - (e - 2 * p1) << " ) " << to_string(p2) << " : " << to_string(e + 2 - p2) << endl;
-													}
-													std::cout << to_string(e) + ": " + to_string(p1) << " : " << to_string(e - p1) << " (" << e - 2 * p1 << ") ";
-													std::cout << flag << " ( " << e + 2 - 2 * p2 - (e - 2 * p1) << " ) " << to_string(p2) << " : " << to_string(e + 2 - p2) << endl;
-												}
-											}
-
-											if (total || sequential || goldbach)
-												continue;
-											if (twins > 0)
-											{
-												ii = k;
-												break;
+												cout << to_string(e) + " (mod 6) = " + to_string(e % 6) + " : " + to_string(p1) + " / " + to_string(e - p1) << " : " << to_string(p2) << " (" << e - 2 * p1 << ") ";
+												cout << flag << " ( " << e + 2 - 2 * p2 - (e - 2 * p1) << " ) " << to_string(p2) << " : " << to_string(e + 2 - p2) << endl;
 											}
 										}
+										else
+										{
+											if (!exception && flag == "*")
+											{
+												if (fileopen)
+												{
+													outfile << to_string(e) + ": " + to_string(p1) << " : " << to_string(e - p1) << " (" << e - 2 * p1 << ") ";
+													outfile << flag << " ( " << e + 2 - 2 * p2 - (e - 2 * p1) << " ) " << to_string(p2) << " : " << to_string(e + 2 - p2) << endl;
+												}
+												std::cout << to_string(e) + ": " + to_string(p1) << " : " << to_string(e - p1) << " (" << e - 2 * p1 << ") ";
+												std::cout << flag << " ( " << e + 2 - 2 * p2 - (e - 2 * p1) << " ) " << to_string(p2) << " : " << to_string(e + 2 - p2) << endl;
+											}
+										}
+
+										if (total || sequential || goldbach)
+											continue;
+										if (twins > 0)
+										{
+											ii = k;
+											break;
+										}
 									}
+								}
 							}
 						}
 					}
@@ -454,7 +457,7 @@ int main()
 					if (fileopen)
 						outfile << "Total number of Goldbach partitions for " << e << ": " << totals << endl;
 				}
-				if (sequential && total &&  !exception)
+				if (sequential && total && !exception)
 				{
 					cout << "Total number of twin prime solutions for " << e << ": " << twins << endl;
 					if (fileopen)
@@ -476,12 +479,14 @@ int main()
 				}
 			}
 			if (exception)
-				std::cout << endl << "Number of exceptions = " << exception_count << endl;
+			{
+				if (fileopen)
+					outfile << "\r" << "Number of exceptions in [" << start << "," << end << "] = " << exception_count << endl;
+				std::cout << "\r" << "Number of exceptions in [" << start << "," << end << "] = " << exception_count << endl;
+			}
 
 			if (fileopen)
 			{
-				outfile << endl << "Range: " << start << " - " << end << endl;
-				outfile << "Number of exceptions = " << exception_count << endl;
 				std::cout << "<" << filename << "> created." << endl;
 				outfile.close();
 			}
