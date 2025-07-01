@@ -132,10 +132,8 @@ int main()
 {
 	string data = GetCurrentDirectory().c_str();
 	string outdata = "C:\\Users\\" + username() + "\\Desktop\\";
-	string base = "C:\\Users\\" + username() + "\\Desktop\\Goldbach_mini\\";
 	string filename, first, dir, cmd;
-	string code, r1 = "";
-	string diff = "";
+	string code,diff = "", r1 = "";
 	int start, end, e, k, count, totals, twins, ndx, exception_count;
 	bool debug = false;
 	bool fileopen = false;
@@ -349,7 +347,13 @@ int main()
 					}
 
 					if (exception)
-						std::cout << " " << e << "\r";
+					{
+						if (ii == 0)
+							std::cout << "               " << "\r";
+						std::cout << " " << e << "\r" ;
+						if (ii > 1000 && ii % 1000 == 0)
+							std::cout << " " << e << ": " << ii/1000 << "\r";
+					}
 
 					if (total && ii > 10000 && ii % 10000 == 0)
 						std::cout << " " << e << ": " << ii / 10000 << "\r";
